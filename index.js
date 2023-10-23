@@ -30,10 +30,13 @@ console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin
   Aşağıdaki skor1 ve skor2 kodlarını inceleyiniz ve aşağıdaki soruları altına not alarak cevaplayın
   
   1. skor1 ve skor2 arasındaki fark nedir?
-  
+  skor1'de fonksiyon içinde fonksiyon tanımlanmış. Skor2'nin orda tanımlanan skor++ değişkeni dışardan da arttırabilir. Ama skor1'deki skor ++'yı sadece skorArtırıcı fonksiyonu içinde değiştirebiliriz. Skor2'de skora dışarıdan erişilebilirken. Skor1'deki skora dışarıdan erişilemez sadece fonksiyonun içiyle erişilebilir.
+
   2. Hangisi bir closure kullanmaktadır? Nasıl tarif edebilirsin? (yarınki derste öğreneceksin :) )
+  Skor1'de var return'ünde başka bir fonksiyon olması sebebi ile çünkü içindeki ve üstündeki değişkeneer çalışmaya ve yaşamaya devam ediyor.
   
   3. Hangi durumda skor1 tercih edilebilir? Hangi durumda skor2 daha mantıklıdır?
+  Closure kullanımı; veri gizliliği için önemli. Skor1 veri gizliliği için kullanılabilir. Normal zamanlarda bunu dışında skor 2 kullanılabilir.
 */
 
 // skor1 kodları
@@ -64,12 +67,12 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru(){
+ const skor = Math.floor(Math.random()*16) + 10; //  +10 olan kısma kadar kod şunu demek istiyor 0 ile 15 arasında bir sayı ata (0 ve 15 dahil demek) +10 diyerek 10 ile 25 arasıdna sayı üretebileceğini söyledik ve 10'da 25'de dahil edildi şu an bu şekilde *15 (arasındaki farktan geliyor, öyle olsaydı 0 dahil 10 dahil değil olacaktı)
+ return skor;
 }
 
-
-
+// console.log("Takım Skoru:" , + takimSkoru());
 
 /* Görev 3: macSonucu() 
 Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
@@ -86,13 +89,19 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
 }
 */ 
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(takimSkoru, periyotsayısı){
+  let EvSahibi = 0;
+  let konuktakım = 0;
+  for(let i=1 ; i<=periyotsayısı; i++){ //periyotlR 1 2 3 4 old için i'leri ona göre yaptık
+    EvSahibi += takimSkoru(); //fonk bir şey atamadım sadece çalıştırdım parantezi aç kapa yaparak += takımskoruna al evsahinie ekle ve ona ata demek 
+    konuktakım += takimSkoru();
+  }
+  return {   // { } yaptık çünkü obje olarak dönmemizi istiyor returnde süslü parantez kullandık bu yüzden 
+  "EvSahibi" : EvSahibi,
+  "KonukTakim": konuktakım
+  }
 }
-
-
-
-
+ // console.log(macSonucu(takimSkoru,4));
 
 
 /* Zorlayıcı Görev 4: periyotSkoru()
@@ -109,11 +118,14 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-
+function periyotSkoru(takimSkoru,) {
+ let skor ={   
+    "EvSahibi" : takimSkoru(),
+    "KonukTakim": takimSkoru()  
+  } // önceki soruda retunle tanımlamamla aynı şey böyle de tanımlanabiliyor
+return skor;
 }
-
+console.log(periyotSkoru(takimSkoru));
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
 Aşağıdaki skorTabelasi() fonksiyonunu kullanarak aşağıdakileri yapınız:
@@ -146,11 +158,39 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function skorTabelasi(pskor, tskor, periyot) {
+let skorarray =[];
+let macskoru = {
+  konuktakım : 0,
+  EvSahibi : 0,
 }
+for( let i=1; i<=periyot; i++){
+ let periyotSkoru = pskor(tskor) // bu bana ev sahibi ve konuktakımı döndürmemizi sağlıyor hangi takım hangi periyotta ne kadar attıyyı dödnürüyor bize
+ let metin = `${i}.periyot: Ev Sahibi ${periyotSkoru.Evsahibi} - konuk takım: ${periyotSkoru.KonukTakim}`
+skorarray.push(metin); //metni hazırlaskor arrayine ekle
+macSkoru.EvSahibi += periyotSkoru.EvSahibi  // periyot skorunu maç skoruna ekle
+macSkoru.konuktakımı += periyotSkoru.KonukTakim;
+}
+//skorlar eşitse uzatmaları oynat
+    //metni hazırlaskor arrayine ekle
+    // uzatma skorunu maç skoruna ekle
+    let u = 1;
+    while(macSkoru.KonukTakimi === macSkoru.Evsahibi){
+      let uzatmaskoru = pskor(tskor)
+      let metin = `${u}.periyot: Ev Sahibi ${uzatmaskoru.Evsahibi}
+      - konuk takım ${uzatmaskoru.KonukTakim}`
+      skorarray.push(metin),
+      macSkoru.EvSahibi += uzatmaskoru.EvSahibi;
+      macSkoru.KonukTakimi += uzatmaskoru.KonukTakim;
+      u++ ;
+    }
 
+let metin =  `Maç Sonucu: Ev Sahibi ${macskoru.EvSahibi} - Konuk Takım ${macskoru.KonukTakimi}`;   // for döngüsünü bitir maç skoru için metni hazırla skor arrayine ekle
+skorarray.push(metin);
 
+return skorarray //benden döndürmemi istediği şey bu 
+}
+ // console.log(skorTabelasi(periyotSkoru, takimSkoru,4)); 
 
 
 /* Aşağıdaki satırları lütfen değiştirmeyiniz*/
